@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
 @Validated
 public interface UserService {
     UserDto createAccount(String email, String password) throws DiaryApplicationException;
-    UserDto addDiary(@NotNull Long id, @NotNull Diary diary) throws DiaryApplicationException;
+    Diary addDiary(@NotNull Long id, @NotNull Diary diary) throws DiaryApplicationException;
 
     User findById(Long userId) throws DiaryApplicationException;
+    boolean deleteUser(User user);
 }

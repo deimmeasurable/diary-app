@@ -49,6 +49,7 @@ public class UserServiceMockTest {
         assertThat(user.getPassword()).isEqualTo(password);
     }
 
+
     @AfterEach
     void tearDown() {
         userService = null;

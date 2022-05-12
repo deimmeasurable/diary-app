@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping("/users/create")
-    public ResponseEntity<?> createUser(@RequestParam @Valid @NotNull @NotBlank String email, @RequestParam @Valid @NotBlank @NotNull String password){
-        try {
+    public ResponseEntity<?> createUser(@RequestParam @Valid @NotNull @NotBlank String email, @RequestParam @Valid @NotBlank @NotNull String password) throws DiaryApplicationException {
+//        try {
             UserDto userDto = userService.createAccount(email, password);
             ApiResponse apiResponse = ApiResponse.builder()
                     .payload(userDto)
@@ -35,13 +35,13 @@ public class UserController {
                     .message("user created successfully")
                     .build();
             return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
-        } catch (DiaryApplicationException e) {
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .message(e.getMessage())
-                    .isSuccessful(false)
-                    .statusCode(400)
-                    .build();
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        }
+//        } catch (DiaryApplicationException e) {
+//            ApiResponse apiResponse = ApiResponse.builder()
+//                    .message(e.getMessage())
+//                    .isSuccessful(false)
+//                    .statusCode(400)
+//                    .build();
+//            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+//        }
     }
 }

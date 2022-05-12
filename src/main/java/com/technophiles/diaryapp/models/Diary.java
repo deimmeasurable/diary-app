@@ -20,7 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-//@JsonIgnoreProperties("user")
+@JsonIgnoreProperties("user")
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

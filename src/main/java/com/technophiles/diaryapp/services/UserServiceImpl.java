@@ -42,15 +42,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto addDiary(@NotNull Long id, @NotNull Diary diary) throws DiaryApplicationException {
+    public Diary addDiary(@NotNull Long id, @NotNull Diary diary) throws DiaryApplicationException {
         User user = userRepository.findById(id).orElseThrow(()-> new DiaryApplicationException("user does not exist"));
         user.addDiary(diary);
-        User savedUser = userRepository.save(user);
-        return mapper.map(savedUser, UserDto.class);
+        userRepository.save(user);
+        return diary;
     }
 
     @Override
     public User findById(Long id) throws DiaryApplicationException {
         return userRepository.findById(id).orElseThrow(() -> new DiaryApplicationException("user does not exist"));
+    }
+
+    @Override
+    public boolean deleteUser(User user) {
+        userRepository.delete(user);
+        return true;
     }
 }
