@@ -4,12 +4,10 @@ import com.technophiles.diaryapp.controllers.reponses.ApiResponse;
 import com.technophiles.diaryapp.dtos.UserDto;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
 import com.technophiles.diaryapp.services.UserService;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +22,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "Welcome to my application";
+    }
     @PostMapping("/users/create")
     public ResponseEntity<?> createUser(@RequestParam @Valid @NotNull @NotBlank String email, @RequestParam @Valid @NotBlank @NotNull String password) throws DiaryApplicationException {
 //        try {
