@@ -24,10 +24,9 @@ public class User {
     private Long id;
 
     @Email
-    @Column(unique = true)
     private String email;
 
-    @Size(min = 6, max = 10)
+    @Size(max = 2444)
     private String password;
 
     @OneToMany(mappedBy = "user",

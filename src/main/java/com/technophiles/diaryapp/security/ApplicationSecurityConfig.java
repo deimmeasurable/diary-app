@@ -1,5 +1,6 @@
 package com.technophiles.diaryapp.security;
 
+import com.technophiles.diaryapp.security.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,16 +29,29 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests(authorize -> {
                     try {
-                        authorize.antMatchers("/**/user/**", "**/**/**/users/login").permitAll()
+                        authorize.antMatchers("/**/users/create/**  ", "/**/auth/login").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
                                 .exceptionHandling().authenticationEntryPoint(unAuthorizedEntryPoint)
                                 .and()
                                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+                        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+                        http.addFilterBefore(exceptionHandlerFilterBean(), JwtAuthenticationFilter.class);
+
                     } catch (Exception e) {
                         throw new RuntimeException(e.getMessage());
                     }
                 });
+    }
+    @Bean
+    public JwtAuthenticationFilter authenticationTokenFilterBean(){
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilterBean(){
+        return new ExceptionHandlerFilter();
     }
 
     @Override

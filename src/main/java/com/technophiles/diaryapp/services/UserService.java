@@ -15,4 +15,5 @@ public interface UserService {
 
     User findById(Long userId) throws DiaryApplicationException;
     boolean deleteUser(User user);
+    User findUserByEmail(String email);
 }
