@@ -2,6 +2,8 @@ package com.technophiles.diaryapp.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,26 +11,26 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.technophiles.diaryapp.security.jwt.SecurityConstants.AUTHORITIES_KEY;
-import static com.technophiles.diaryapp.security.jwt.SecurityConstants.SIGNING_KEY;
 
 
 @Component
 @Slf4j
 public class TokenProviderImpl implements TokenProvider{
 
-
     private final static Long TOKEN_VALIDITY_PERIOD = (long) (24 * 10 * 3600);
 
-//    private String SIGNING_KEY = System.getenv("SECRET_KEY");
-//    private String AUTHORITIES_KEY = System.getenv("AUTHORITIES_KEY");
+    private static String SIGNING_KEY = System.getenv("SIGNING_KEY");
+    private static String AUTHORITIES_KEY = System.getenv("AUTHORITIES_KEY");
+
+
+
+
 
     @Override
     public String getUsernameFromJWTToken(String token) {
