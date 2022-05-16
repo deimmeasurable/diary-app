@@ -3,6 +3,7 @@ package com.technophiles.diaryapp.controllers;
 import com.technophiles.diaryapp.controllers.reponses.ApiResponse;
 import com.technophiles.diaryapp.dtos.UserDto;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
+import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.services.UserService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -53,5 +55,17 @@ public class UserController {
 //                    .build();
 //            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 //        }
+    }
+
+    @GetMapping("/users/all")
+    public ResponseEntity<?> getAllUsers(){
+        List<User> users = userService.getAllUsers();
+        ApiResponse apiResponse = ApiResponse.builder()
+                .payload(users)
+                .message("user returned successfully")
+                .statusCode(200)
+                .isSuccessful(true)
+                .build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

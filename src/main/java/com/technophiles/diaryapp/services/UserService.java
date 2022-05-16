@@ -7,6 +7,7 @@ import com.technophiles.diaryapp.models.User;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Validated
 public interface UserService {
@@ -16,4 +17,6 @@ public interface UserService {
     User findById(Long userId) throws DiaryApplicationException;
     boolean deleteUser(User user);
     User findUserByEmail(String email);
+
+    List<User> getAllUsers();
 }
