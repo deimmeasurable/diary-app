@@ -2,8 +2,6 @@ package com.technophiles.diaryapp.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,8 +23,8 @@ public class TokenProviderImpl implements TokenProvider{
 
     private final static Long TOKEN_VALIDITY_PERIOD = (long) (24 * 10 * 3600);
 
-    private static String SIGNING_KEY = System.getenv("SIGNING_KEY");
-    private static String AUTHORITIES_KEY = System.getenv("AUTHORITIES_KEY");
+    public final String SIGNING_KEY = System.getenv("SIGNING_KEY");
+    public final String AUTHORITIES_KEY = System.getenv("AUTHORITIES_KEY");
 
 
 
@@ -72,12 +70,15 @@ public class TokenProviderImpl implements TokenProvider{
 
     @Override
     public String generateJWTToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
         log.info("Signing key -> {}", SIGNING_KEY);
         log.info("Authorities key -> {}", AUTHORITIES_KEY);
         log.info("Authentication name --> {}",authentication.getName());
         String jwts=  Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authentication.getAuthorities())
+                .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_PERIOD))
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)

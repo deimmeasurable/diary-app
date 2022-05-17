@@ -4,8 +4,6 @@ import com.technophiles.diaryapp.dtos.UserDto;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
 import com.technophiles.diaryapp.exceptions.UserNotFoundException;
 import com.technophiles.diaryapp.models.Diary;
-import com.technophiles.diaryapp.models.Permission;
-import com.technophiles.diaryapp.models.Role;
 import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -94,31 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     Set<? extends GrantedAuthority> getAuthorities(
             Set<Role> roles) {
-
-        return getGrantedAuthorities(getPrivileges(roles));
-    }
-
-    Set<String> getPrivileges(Set<Role> roles) {
-
-        Set<String> permissions = new HashSet<>();
-        Set<Permission> collection = new HashSet<>();
-        for (Role role : roles) {
-            permissions.add(role.getName());
-            collection.addAll(role.getPermissions());
-        }
-        for (Permission item : collection) {
-            permissions.add(item.getName());
-        }
-        log.info("Permissions --> {}", permissions);
-        return permissions;
-    }
-
-    private Set<GrantedAuthority> getGrantedAuthorities(Set<String> permissions) {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        for (String permission: permissions) {
-            authorities.add(new SimpleGrantedAuthority(permission));
-        }
-        log.info("Simple Granted Authorities --> {}", permissions);
+        final Set<SimpleGrantedAuthority> authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
         return authorities;
     }
 }

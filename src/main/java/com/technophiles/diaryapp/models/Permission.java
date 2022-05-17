@@ -1,26 +1,26 @@
-package com.technophiles.diaryapp.models;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
-
-
-@NoArgsConstructor
-@Getter
-@Setter
-@Entity
-public class Permission {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String name;
-
-
-    public Permission(String name) {
-        this.name = name;
-    }
-}
+//package com.technophiles.diaryapp.models;
+//
+//import lombok.Getter;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
+//
+//import javax.persistence.*;
+//
+//
+//@NoArgsConstructor
+//@Getter
+//@Entity
+//public enum Permission {
+//    DELETE_USER("user:delete");
+//
+//    @Id
+//    @Column(name = "id", nullable = false)
+//    private Long id;
+//
+//    private String permission;
+//
+//    Permission(String permission){
+//        this.permission = permission;
+//    }
+//
+//}

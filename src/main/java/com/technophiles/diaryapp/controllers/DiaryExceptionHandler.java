@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,11 +29,15 @@ public class DiaryExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, apiResponse,
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
-
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
+        ApiResponse response = new ApiResponse(exception.getMessage(),false, 400, "You do not have permission to perform that action");
+        return new ResponseEntity<Object>(
+                response , new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> exceptionHandler(Exception exception, WebRequest request){
         exception.printStackTrace();
-        log.info("Here now now now now ");
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(exception.getMessage())
                 .isSuccessful(false)
