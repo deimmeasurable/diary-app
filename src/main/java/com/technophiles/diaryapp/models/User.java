@@ -35,11 +35,12 @@ public class User {
             orphanRemoval = true)
     private Set<Diary> diaries;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User(String email, String password, RoleType roleType) {
-        this(email, password);
+        this.email = email;
+        this.password = password;
         if (roles == null){
             roles = new HashSet<>();
         }
@@ -57,6 +58,12 @@ public class User {
         this.diaries = new HashSet<>();
     }
 
+    public void addRole(Role role){
+        if (this.roles == null){
+            this.roles = new HashSet<>();
+        }
+        roles.add(role);
+    }
 
     public void addDiary(Diary diary){
         diaries.add(diary);

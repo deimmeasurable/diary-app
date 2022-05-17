@@ -70,9 +70,11 @@ public class TokenProviderImpl implements TokenProvider{
 
     @Override
     public String generateJWTToken(Authentication authentication) {
+        log.info("Authentication in generate token --> {}", authentication);
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+        log.info("Authorities --> {}", authorities);
         String jwts=  Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)

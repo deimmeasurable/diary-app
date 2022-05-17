@@ -1,5 +1,6 @@
 package com.technophiles.diaryapp.config;
 
+import com.technophiles.diaryapp.models.Role;
 import com.technophiles.diaryapp.models.RoleType;
 import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
@@ -21,7 +22,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (userRepository.findUserByEmail("adminuser@gmail.com").isEmpty()){
-            User user = new User("adminuser@gmail.com", passwordEncoder.encode("password1234#"), RoleType.ROLE_ADMIN);
+            User user = new User("adminuser@gmail.com", passwordEncoder.encode("password1234#"));
+            user.addRole(new Role(RoleType.ROLE_ADMIN));
             userRepository.save(user);
         }
     }

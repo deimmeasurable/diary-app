@@ -4,6 +4,7 @@ import com.technophiles.diaryapp.dtos.UserDto;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
 import com.technophiles.diaryapp.exceptions.UserNotFoundException;
 import com.technophiles.diaryapp.models.Diary;
+import com.technophiles.diaryapp.models.Role;
 import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -85,9 +86,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email).orElseThrow(()-> new UserNotFoundException("user not found"));
-        org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
         log.info("Returned user --> {}", returnedUser);
         return returnedUser;
     }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
+       Collection<? extends  SimpleGrantedAuthority> authorities = roles.stream().map(
+               role -> new SimpleGrantedAuthority(role.getRoleType().name())
+       ).collect(Collectors.toSet());
+       return authorities;
+    }
+
 
 }
