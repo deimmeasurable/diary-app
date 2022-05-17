@@ -85,15 +85,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email).orElseThrow(()-> new UserNotFoundException("user not found"));
-        org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+        org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
         log.info("Returned user --> {}", returnedUser);
         return returnedUser;
     }
 
-    @Transactional
-    Set<? extends GrantedAuthority> getAuthorities(
-            Set<Role> roles) {
-        final Set<SimpleGrantedAuthority> authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
-        return authorities;
-    }
 }
