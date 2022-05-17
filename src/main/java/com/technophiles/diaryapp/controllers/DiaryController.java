@@ -35,6 +35,7 @@ public class DiaryController {
 
 
     @PostMapping("/create/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> createDiary(@Valid @NotNull @NotBlank @PathVariable("userId") String userId, @NotNull @NotBlank @RequestParam String title){
         log.info("User Service --> {}", userService);
         log.info("Diary User --> {}", diaryService);

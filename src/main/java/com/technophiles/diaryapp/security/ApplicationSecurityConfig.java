@@ -34,6 +34,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests(authorize -> {
                     try {
                         authorize.antMatchers("/**/users/create/**", "/**/users/all/**","/**/auth/login").permitAll()
+//                                .antMatchers("/**/diary/add/**").hasAnyRole("ROLE_ADMIN")
                                 .anyRequest().authenticated()
                                 .and()
                                 .exceptionHandling().authenticationEntryPoint(unAuthorizedEntryPoint)

@@ -73,9 +73,6 @@ public class TokenProviderImpl implements TokenProvider{
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        log.info("Signing key -> {}", SIGNING_KEY);
-        log.info("Authorities key -> {}", AUTHORITIES_KEY);
-        log.info("Authentication name --> {}",authentication.getName());
         String jwts=  Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)

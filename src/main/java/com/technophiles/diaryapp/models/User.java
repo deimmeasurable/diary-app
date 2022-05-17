@@ -35,6 +35,17 @@ public class User {
             orphanRemoval = true)
     private Set<Diary> diaries;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Role> roles;
+
+    public User(String email, String password, RoleType roleType) {
+        this(email, password);
+        if (roles == null){
+            roles = new HashSet<>();
+        }
+        roles.add(new Role(roleType));
+    }
+
     @Override
     public String toString() {
         return String.format("id:%d\temail:%s", id, email);
